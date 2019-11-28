@@ -1,2 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+/data/ready/
+/data/raw/
+/old_code/
+/scripts/

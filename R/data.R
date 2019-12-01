@@ -6,25 +6,54 @@
 #' @docType data
 #' @usage data(kingco_sales)
 #' @source King County Assessor: http://info.kingcounty.gov/assessor/DataDownload/
-#' @format A \code{"data.frame"} with 480,011 rows and 47 variables
+#' @format A \code{"data.frame"} with 480,011 rows and 46 variables
 #' \describe{
-#'   \item{pinx}{The unique property identifying code.  Original value is preceded by
-#'   two '..'s to prevent the dropping of leading zeros}
 #'   \item{sale_id}{The unique transaction identifying code.}
-#'   \item{sale_price}{Price of the home}
+#'   \item{pinx}{The unique property identifying code (Major + Minor).  Original value is preceded by
+#'   two '..'s to prevent the dropping of leading zeros}
 #'   \item{sale_date}{Date of sale}
-#'   \item{use_type}{Property use type}
-#'   \item{area}{Assessment area or zone}
-#'   \item{lot_sf}{Size of lot in square feet}
-#'   \item{wfnt}{Is property waterfront?}
-#'   \item{bldg_grade}{Quality of the building construction (higher is better)}
-#'   \item{tot_sf}{Size of home in square feet}
-#'   \item{beds}{Number of bedrooms}
-#'   \item{baths}{Number of bathrooms}
-#'   \item{age}{Age of home}
-#'   \item{eff_age}{Age of home, considering major remodels}
+#'   \item{sale_price}{Price of the home}
+#'   \item{sale_nbr}{Count of times this property sold during time period}
+#'   \item{sale_warning}{Assessor's warning code for this sale}
+#'   \item{join_status}{Type of data join, see `explain("join_status") for more details`}
+#'   \item{join_year}{Year of data joined to the sale -- based on 'join_status'}
 #'   \item{longitude}{Longitude}
 #'   \item{latitude}{Latitude }
-#'}
+#'   \item{area}{Assessment area or zone}
+#'   \item{city}{City}
+#'   \item{zoning}{Local zoning code}
+#'   \item{present_use}{Property Use Code}
+#'   \item{land_val}{Land Tax Value (based on Join Year)}
+#'   \item{imp_val}{Improved Tax Value (based on Join Year)}
+#'   \item{year_built}{Year home built}
+#'   \item{year_reno}{Year major renovation}
+#'   \item{sqft_lot}{Lot size in square feet}
+#'   \item{sqft}{Square footage of house}
+#'   \item{sqft_1}{Square footage of first floor}
+#'   \item{sqft_fbsmt}{Square footage of finished basement}
+#'   \item{grade}{Building quality}
+#'   \item{fbsmt_grade}{Building quality of finished basement}
+#'   \item{condition}{Home condition}
+#'   \item{stories}{# of Stories}
+#'   \item{beds}{# of beds}
+#'   \item{bath_full}{# of Full Baths}
+#'   \item{bath_3qtr}{# of 3/4 Baths}
+#'   \item{bath_half}{# of 1/2 Baths}
+#'   \item{garb_sqft}{Basement garage square feet}
+#'   \item{gara_sqft}{Attached garage square feetn}
+#'   \item{wfnt}{Waterfront rating}
+#'   \item{golf}{On golf course}
+#'   \item{greenbelt}{On greenbelt}
+#'   \item{traffic_noies}{Traffic Noise rating}
+#'   \item{view_rainier}{View of Mt. Raininer}
+#'   \item{view_olympics}{View of Olympic Mountains}
+#'   \item{view_cascades}{View of Cascade Mountains}
+#'   \item{view_territorial}{Territorial View}
+#'   \item{view_skyline}{View of Seattle Skyline}
+#'   \item{view_sound}{View of Puget Sound}
+#'   \item{view_lakewash}{View of Lake Washington}
+#'   \item{view_lakesamm}{View of Lake Sammammish}
+#'   \item{view_otherwater}{View of Other Water}
+#'   \item{view_other}{View of Other}
 #'
 "kingco_sales"

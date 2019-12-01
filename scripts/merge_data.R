@@ -203,7 +203,7 @@ rb99_df <- rb99_df %>%
                  condition, stories, beds, bath_full, bath_3qtr, bath_half, garb_sqft, gara_sqft,
                  wfnt, golf, greenbelt, noise_traffic, view_rainier, view_olympics, view_cascades,
                  view_territorial, view_skyline, view_sound, view_lakewash, view_lakesamm,
-                 view_otherwater, view_other, view_util)
+                 view_otherwater, view_other)
 
 ### Write out data ---------------------------------------------------------------------------------
 

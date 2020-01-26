@@ -6,7 +6,10 @@
 
   library(tidyverse)
 
-  data_path <- file.path(getwd(), 'data', 'raw')
+  library(kingCoData)
+
+  base_path <- 'c:/dropbox/andy/public/'
+  data_path <- file.path(base_path, 'raw')
 
 ### Tax Data --------------------------------------------------------------------------------------
 
@@ -31,9 +34,9 @@
 
  # Save
  saveRDS(tax_df %>% dplyr::filter(tax_year == 1999),
-         file.path(getwd(), 'data', 'ready', 'tax_1999.RDS'))
+         file.path(data_path, 'tax_1999.RDS'))
  saveRDS(tax_df %>% dplyr::filter(tax_year != 1999),
-         file.path(getwd(), 'data', 'ready', 'tax_current.RDS'))
+         file.path(data_path, 'tax_current.RDS'))
 
 ### Change Data ------------------------------------------------------------------------------------
 
@@ -52,7 +55,7 @@
 
  # Save
  saveRDS(ch_df,
-         file.path(getwd(), 'data', 'ready', 'major_changes.RDS'))
+         file.path(base_path, 'ready', 'major_changes.RDS'))
 
 #***************************************************************************************************
 #***************************************************************************************************

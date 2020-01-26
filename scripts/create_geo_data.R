@@ -8,6 +8,9 @@
 
   library(sf)
   library(tidyverse)
+  library(kingCoData)
+
+  data_path <- 'c:/dropbox/andy/public/'
 
  # Set King County Assessor's Projection
   king_county_proj <- paste0('+proj=lcc +lat_0=47 +lon_0=-120.833333333333 ',
@@ -15,13 +18,13 @@
                              '+ellps=GRS80 +units=us-ft +no_defs')
 
   # load data
-  parcel_polygon_1999_path <- file.path(getwd(), 'data', 'raw', 'parcel_shapefiles_1999',
+  parcel_polygon_1999_path <- file.path(data_path, 'raw', 'parcel_shapefiles_1999',
                                         'parcel.shp')
   poly99_sf <- sf::st_read(parcel_polygon_1999_path)
 
-  parcel_polygon_2019_path <- file.path(getwd(), 'data', 'raw', 'parcel_shapefiles_2019',
+  parcel_polygon_2020_path <- file.path(data_path, 'raw', 'parcel_shapefiles_2020',
                                         'king_county_parcels__parcel_area.shp')
-  poly19_sf <- sf::st_read(parcel_polygon_2019_path)
+  poly20_sf <- sf::st_read(parcel_polygon_2020_path)
 
   # Set CRS
   sf::st_crs(poly99_sf) <- king_county_proj
@@ -33,15 +36,15 @@
   poly99_sf <- poly99_sf %>%
     dplyr::filter(!is.na(valid_idx))
 
-  valid_idx <- sf::st_is_valid(poly19_sf)
-  poly19_sf <- poly19_sf %>%
+  valid_idx <- sf::st_is_valid(poly20_sf)
+  poly20_sf <- poly20_sf %>%
     dplyr::filter(!is.na(valid_idx))
 
   # Calculate Centroids
   point99_sf <- poly99_sf %>%
     sf::st_centroid()
 
-  point19_sf <- poly19_sf %>%
+  point20_sf <- poly20_sf %>%
     sf::st_centroid()
 
   # Extract centroids as features
@@ -49,8 +52,8 @@
     sf::st_coordinates(point99_sf) %>%
     as.data.frame()
 
-  coords19_df <-
-    sf::st_coordinates(point19_sf) %>%
+  coords20_df <-
+    sf::st_coordinates(point20_sf) %>%
     as.data.frame()
 
   # Conver tto data.frame
@@ -58,13 +61,13 @@
                          latitude = coords99_df$Y,
                          longitude = coords99_df$X)
 
-  geo19_df <- data.frame(PIN = point19_sf$PIN,
-                         latitude = coords19_df$Y,
-                         longitude = coords19_df$X)
+  geo20_df <- data.frame(PIN = point20_sf$PIN,
+                         latitude = coords20_df$Y,
+                         longitude = coords20_df$X)
 
   ## Save Data
-  saveRDS(geo99_df, file.path(getwd(), 'data', 'ready', 'geo_99.rds'))
-  saveRDS(geo19_df, file.path(getwd(), 'data', 'ready', 'geo_new.rds'))
+  saveRDS(geo99_df, file.path(data_path, 'ready', 'geo_99.rds'))
+  saveRDS(geo20_df, file.path(data_path, 'ready', 'geo_new.rds'))
 
 #***************************************************************************************************
 #***************************************************************************************************

@@ -8,11 +8,16 @@
 
   library(tidyverse)
 
+  library(kingCoData)
+
+
+  data_path <- 'c:/dropbox/andy/public'
+
   sale_min <- 1999
   sale_max <- 2019
 
   # Sales data
-  sales_df <- read.csv(file.path(file.path(getwd(), 'data', 'raw', 'sales',
+  sales_df <- read.csv(file.path(file.path(data_path, 'raw', 'sales',
                                           'extr_rpsale.csv')))
 
   # base clean
@@ -107,4 +112,4 @@
                   property_class = PropertyClass, sales_cnt, sale_nbr, sale_warning)
 
   # Write out temporary sales files
-  saveRDS(clean_df, file.path(file.path(getwd(), 'data', 'ready', 'sales.rds')))
+  saveRDS(clean_df, file.path(file.path(data_path, 'ready', 'sales.rds')))

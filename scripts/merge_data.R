@@ -5,32 +5,35 @@
 
  library(tidyverse)
 
- data_path <- file.path(getwd(), 'data', 'raw')
+ library(kingCoData)
+
+ base_path <- 'c:/dropbox/andy/public/'
+ data_path <- file.path(base_path, 'ready')
  end_year <- 2019
 
 ### Load Data --------------------------------------------------------------------------------------
 
 # Parcel Data
-par99_df <- read.csv(file.path(data_path, 'parcel', 'parcel_1999.csv'))
-parcur_df <- read.csv(file.path(data_path, 'parcel', 'parcel_current.csv'))
+par99_df <- read.csv(file.path(base_path, 'raw', 'parcel', 'parcel_1999.csv'))
+parcur_df <- read.csv(file.path(base_path, 'raw', 'parcel', 'parcel_current.csv'))
 
 # Parcel Data
-rb99_df <- read.csv(file.path(data_path,  'res_bldg', 'resbldg_1999.csv'))
-rbcur_df <- read.csv(file.path(data_path, 'res_bldg', 'resbldg_current.csv'))
+rb99_df <- read.csv(file.path(base_path,  'raw', 'res_bldg', 'resbldg_1999.csv'))
+rbcur_df <- read.csv(file.path(base_path, 'raw', 'res_bldg', 'resbldg_current.csv'))
 
 # Tax Data
-tax99_df <- readRDS(file.path(getwd(), 'data', 'ready', 'tax_1999.rds'))
-taxcur_df <- readRDS(file.path(getwd(), 'data', 'ready', 'tax_current.rds'))
+tax99_df <- readRDS(file.path(data_path, 'tax_1999.rds'))
+taxcur_df <- readRDS(file.path(data_path, 'tax_current.rds'))
 
 # Tax Data
-geo99_df <- readRDS(file.path(getwd(), 'data', 'ready', 'geo_99.rds'))
-geocur_df <- readRDS(file.path(getwd(), 'data', 'ready', 'geo_new.rds'))
+geo99_df <- readRDS(file.path(data_path, 'geo_99.rds'))
+geocur_df <- readRDS(file.path(data_path, 'geo_new.rds'))
 
 # Changes
-changes_df <- readRDS(file.path(getwd(), 'data', 'ready', 'major_changes.rds'))
+changes_df <- readRDS(file.path(data_path, 'major_changes.rds'))
 
 # Sales
-sales_df <- readRDS(file.path(getwd(), 'data', 'ready', 'sales.RDS'))
+sales_df <- readRDS(file.path(data_path, 'sales.RDS'))
 
 ### Prepare Parcel, ResBldg and Tax Files ----------------------------------------------------------
 
@@ -195,6 +198,9 @@ rb99_df <- rb99_df %>%
    dplyr::filter(!is.na(latitude)) %>%
    dplyr::filter(!is.na(land_val)) %>%
    dplyr::filter(sale_price > 50000) %>%
+   dplyr::mutate(sale_date = as.Date(sale_date),
+                 golf = ifelse(golf == 'Y', 1, 0),
+                 greenbelt = ifelse(greenbelt == 'Y', 1, 0)) %>%
    dplyr::select(sale_id, pinx, sale_date, sale_price, sale_nbr, sale_warning,
                  join_status = match_type, join_year = match_year,
                  latitude, longitude, area, city, zoning,

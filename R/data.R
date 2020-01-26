@@ -1,12 +1,12 @@
 
-#' King County Sales 1999 to 2019
+#' King County Sales 1999-01-01 through 2019-12-31
 #'
 #' King County residential transactions of single family and townhomes.
 #'
 #' @docType data
 #' @usage data(kingco_sales)
 #' @source King County Assessor: http://info.kingcounty.gov/assessor/DataDownload/
-#' @format A \code{"data.frame"} with 480,011 rows and 46 variables
+#' @format A \code{"data.frame"} with 458,044 rows and 46 variables
 #' \describe{
 #'   \item{sale_id}{The unique transaction identifying code.}
 #'   \item{pinx}{The unique property identifying code (Major + Minor).  Original value is preceded by
@@ -55,5 +55,21 @@
 #'   \item{view_lakesamm}{View of Lake Sammammish}
 #'   \item{view_otherwater}{View of Other Water}
 #'   \item{view_other}{View of Other}
-#'
+#'}
 "kingco_sales"
+
+#'
+#' Custom residential submarkets in King County WA
+#'
+#' Join to the 'area' field in `kingco_sales`
+#'
+#' @docType data
+#' @usage data(kingco_submarkets)
+#' @source Author created
+#' @format A \code{"data.frame"} with 95 rows and 2 variables
+#' \describe{
+#'   \item{area}{Assessment area or zone}
+#'   \item{submarket}{Custom submarket data}
+#' }
+"kingco_submarkets"
+

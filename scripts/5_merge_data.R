@@ -121,7 +121,7 @@ rb99_df <- rb99_df %>%
     dplyr::filter(!is.na(yb99) & !is.na(ybnew) &
                     yb99 == ybnew & yrnew == 0) %>%
     dplyr::mutate(match_type = 'nochg',
-                  match_year = end_year)
+                  match_year = CURR_YEAR)
 
   x_df <- trim_df %>%
     dplyr::filter(!sale_id %in% nochg_df$sale_id)
@@ -138,8 +138,8 @@ rb99_df <- rb99_df %>%
   # New construction
   new_df <- x_df %>%
     dplyr::filter(is.na(yb99)) %>%
-    dplyr::mutate(match_type = ifelse(yb19 < 1999, 'miss99', 'new'),
-                  match_year = end_year)
+    dplyr::mutate(match_type = ifelse(ybnew < 1999, 'miss99', 'new'),
+                  match_year = CURR_YEAR)
 
   x_df <- x_df %>%
     dplyr::filter(!sale_id %in% new_df$sale_id)
@@ -149,7 +149,7 @@ rb99_df <- rb99_df %>%
     dplyr::filter(yb99 != ybnew) %>%
     dplyr::mutate(match_type = ifelse(ybnew > sale_year, 'rebuilt - after',
                                       ifelse(ybnew < sale_year, 'rebuilt - before', 'rebuilt - ?')),
-                  match_year = ifelse(match_type == 'rebuilt - after', end_year,
+                  match_year = ifelse(match_type == 'rebuilt - after', CURR_YEAR,
                                       ifelse(match_type == 'rebuilt - before', 1999, -1)))
 
   x_df <- x_df %>%
@@ -158,10 +158,10 @@ rb99_df <- rb99_df %>%
   # Renovated
   reno_df <- x_df %>%
     dplyr::mutate(match_type = ifelse(yrnew > sale_year, 'reno - after',
-                                      ifelse(yr19 < sale_year, 'reno - before', 'reno - ?')),
+                                      ifelse(yrnew < sale_year, 'reno - before', 'reno - ?')),
                   match_year = ifelse(match_type == 'reno - after', 1999,
                                       ifelse(match_type == 'reno - before',
-                                             ifelse(yrnew < 1999, 1999, end_year), -1)))
+                                             ifelse(yrnew < 1999, 1999, CURR_YEAR), -1)))
 
 ### Join and Row Bind ------------------------------------------------------------------------------
 
@@ -184,8 +184,8 @@ rb99_df <- rb99_df %>%
 
  # Matched to 2019
   salecur_df <- sale_df %>%
-    dplyr::filter(match_year == end_year) %>%
-    dplyr::select(-c(yb99, yr99, yb19, yr19)) %>%
+    dplyr::filter(match_year == CURR_YEAR) %>%
+    dplyr::select(-c(yb99, yr99, ybnew, yrnew)) %>%
     dplyr::left_join(., parcur_df, by = 'pinx') %>%
     dplyr::left_join(., rbcur_df, by = 'pinx') %>%
     dplyr::left_join(., taxcur_df %>%
@@ -214,7 +214,10 @@ rb99_df <- rb99_df %>%
                  condition, stories, beds, bath_full, bath_3qtr, bath_half, garb_sqft, gara_sqft,
                  wfnt, golf, greenbelt, noise_traffic, view_rainier, view_olympics, view_cascades,
                  view_territorial, view_skyline, view_sound, view_lakewash, view_lakesamm,
-                 view_otherwater, view_other)
+                 view_otherwater, view_other) %>%
+   dplyr::left_join(.,
+                    subm_df %>% dplyr::select(area, submarket),
+                    by = 'area')
 
 ### Write out data ---------------------------------------------------------------------------------
 

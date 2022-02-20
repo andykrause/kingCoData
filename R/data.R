@@ -55,6 +55,7 @@
 #'   \item{view_lakesamm}{View of Lake Sammammish}
 #'   \item{view_otherwater}{View of Other Water}
 #'   \item{view_other}{View of Other}
+#'   \item{submarket}{'Area' Field grouped into larger submarkets (subjective)}
 #'}
 "kingco_sales"
 

@@ -7,14 +7,16 @@
   ## Load Libraries
 
   library(tidyverse)
-
   library(kingCoData)
 
+  ## Set Paths
+  data_path <- file.path(getwd(), 'data')
+  raw_path <- file.path(data_path, 'raw')
+  ready_path <- file.path(data_path, 'ready')
 
-  data_path <- 'c:/dropbox/andy/public'
-
+  # Set Cutoffs
   sale_min <- 1999
-  sale_max <- 2019
+  sale_max <-  as.numeric(substr(Sys.Date(), 1, 4)) - 1
 
   # Sales data
   sales_df <- read.csv(file.path(file.path(data_path, 'raw', 'sales',

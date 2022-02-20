@@ -1,20 +1,24 @@
-
+#***************************************************************************************************
 #
 #   Prepare the King County data
 #
 #***************************************************************************************************
 
   library(tidyverse)
-
   library(kingCoData)
 
-  base_path <- 'c:/dropbox/andy/public/'
-  data_path <- file.path(base_path, 'raw')
+  ## Set Paths
+  data_path <- file.path(getwd(), 'data')
+  raw_path <- file.path(data_path, 'raw')
+  ready_path <- file.path(data_path, 'ready')
+
+
+  CURR_YEAR = as.numeric(substr(Sys.Date(), 1, 4))
 
 ### Tax Data --------------------------------------------------------------------------------------
 
  # Tax Data
- taxraw_df <- read.csv(file.path(data_path, 'tax', 'taxrec.csv'))
+ taxraw_df <- read.csv(file.path(raw_path, 'EXTR_taxacctreceivable_v.csv'))
 
  # Create two annual snapshots
  tax_df <- taxraw_df %>%
@@ -27,21 +31,21 @@
  }
 
  tax_df <- tax_df %>%
-   dplyr::filter(BillYr == 2000 | BillYr == 2020) %>%
+   dplyr::filter(BillYr == 2000 | BillYr == CURR_YEAR) %>%
    dplyr::mutate(pinx = paste0('..', substr(AcctNbr, 1, 10))) %>%
    dplyr::select(pinx, tax_year = BillYr, land_val = LandVal, imp_val = ImpsVal) %>%
    dplyr::mutate(tax_year = tax_year - 1)
 
  # Save
  saveRDS(tax_df %>% dplyr::filter(tax_year == 1999),
-         file.path(data_path, 'tax_1999.RDS'))
+         file.path(ready_path, 'tax_1999.RDS'))
  saveRDS(tax_df %>% dplyr::filter(tax_year != 1999),
-         file.path(data_path, 'tax_current.RDS'))
+         file.path(ready_path, 'tax_current.RDS'))
 
 ### Change Data ------------------------------------------------------------------------------------
 
  # Load data
- chraw_df <- read.csv(file.path(data_path, 'change history', 'extr_changehist_v.csv'))
+ chraw_df <- read.csv(file.path(raw_path, 'extr_changehist_v.csv'))
 
  # Create limited change data
  ch_df <- chraw_df %>%
@@ -54,8 +58,7 @@
   dplyr::filter(event_date >= as.Date('1999-01-01'))
 
  # Save
- saveRDS(ch_df,
-         file.path(base_path, 'ready', 'major_changes.RDS'))
+ saveRDS(ch_df, file.path(ready_path, 'major_changes.RDS'))
 
 #***************************************************************************************************
 #***************************************************************************************************

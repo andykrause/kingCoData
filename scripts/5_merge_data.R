@@ -3,37 +3,42 @@
 #
 #***************************************************************************************************
 
- library(tidyverse)
+  library(tidyverse)
+  library(kingCoData)
 
- library(kingCoData)
+  ## Set Paths
+  data_path <- file.path(getwd(), 'data')
+  raw_path <- file.path(data_path, 'raw')
+  ready_path <- file.path(data_path, 'ready')
 
- base_path <- 'c:/dropbox/andy/public/'
- data_path <- file.path(base_path, 'ready')
- end_year <- 2019
+  CURR_YEAR = as.numeric(substr(Sys.Date(), 1, 4)) - 1
 
 ### Load Data --------------------------------------------------------------------------------------
 
-# Parcel Data
-par99_df <- read.csv(file.path(base_path, 'raw', 'parcel', 'parcel_1999.csv'))
-parcur_df <- read.csv(file.path(base_path, 'raw', 'parcel', 'parcel_current.csv'))
+  # Parcel Data
+  par99_df <- read.csv(file.path(raw_path, 'parcel_1999.csv'))
+  parcur_df <- read.csv(file.path(raw_path, 'EXTR_parcel.csv'))
 
-# Parcel Data
-rb99_df <- read.csv(file.path(base_path,  'raw', 'res_bldg', 'resbldg_1999.csv'))
-rbcur_df <- read.csv(file.path(base_path, 'raw', 'res_bldg', 'resbldg_current.csv'))
+  # Parcel Data
+  rb99_df <- read.csv(file.path(raw_path, 'resbldg_1999.csv'))
+  rbcur_df <- read.csv(file.path(raw_path,'EXTR_resbldg.csv'))
 
-# Tax Data
-tax99_df <- readRDS(file.path(data_path, 'tax_1999.rds'))
-taxcur_df <- readRDS(file.path(data_path, 'tax_current.rds'))
+  # Tax Data
+  tax99_df <- readRDS(file.path(ready_path, 'tax_1999.rds'))
+  taxcur_df <- readRDS(file.path(ready_path, 'tax_current.rds'))
 
-# Tax Data
-geo99_df <- readRDS(file.path(data_path, 'geo_99.rds'))
-geocur_df <- readRDS(file.path(data_path, 'geo_new.rds'))
+  # Tax Data
+  geo99_df <- readRDS(file.path(ready_path, 'geo_99.rds'))
+  geocur_df <- readRDS(file.path(ready_path, 'geo_new.rds'))
 
-# Changes
-changes_df <- readRDS(file.path(data_path, 'major_changes.rds'))
+  # Changes
+  changes_df <- readRDS(file.path(ready_path, 'major_changes.rds'))
 
-# Sales
-sales_df <- readRDS(file.path(data_path, 'sales.RDS'))
+  # Sales
+  sales_df <- readRDS(file.path(ready_path, 'sales.RDS'))
+
+  # Submarkets
+  subm_df <- read.csv(file.path(ready_path, 'submarkets.csv'))
 
 ### Prepare Parcel, ResBldg and Tax Files ----------------------------------------------------------
 
@@ -101,7 +106,7 @@ rb99_df <- rb99_df %>%
   rbs_df <- rb99_df %>%
     dplyr::select(pinx, yb99 = year_built, yr99 = year_reno) %>%
     dplyr::full_join(rbcur_df %>%
-                       dplyr::select(pinx, yb19 = year_built, yr19 = year_reno),
+                       dplyr::select(pinx, ybnew = year_built, yrnew = year_reno),
                      by = 'pinx')
 
   # Add RBS to sales and filter by property type
@@ -113,8 +118,8 @@ rb99_df <- rb99_df %>%
 
   # No change
   nochg_df <- trim_df %>%
-    dplyr::filter(!is.na(yb99) & !is.na(yb19) &
-                    yb99 == yb19 & yr19 == 0) %>%
+    dplyr::filter(!is.na(yb99) & !is.na(ybnew) &
+                    yb99 == ybnew & yrnew == 0) %>%
     dplyr::mutate(match_type = 'nochg',
                   match_year = end_year)
 
@@ -123,7 +128,7 @@ rb99_df <- rb99_df %>%
 
   # Demolished
   demo_df <- x_df %>%
-    dplyr::filter(is.na(yb19)) %>%
+    dplyr::filter(is.na(ybnew)) %>%
     dplyr::mutate(match_type = 'demo',
                   match_year = 1999)
 
@@ -141,9 +146,9 @@ rb99_df <- rb99_df %>%
 
   # Rebuilt home
   rebuilt_df <- x_df %>%
-    dplyr::filter(yb99 != yb19) %>%
-    dplyr::mutate(match_type = ifelse(yb19 > sale_year, 'rebuilt - after',
-                                      ifelse(yb19 < sale_year, 'rebuilt - before', 'rebuilt - ?')),
+    dplyr::filter(yb99 != ybnew) %>%
+    dplyr::mutate(match_type = ifelse(ybnew > sale_year, 'rebuilt - after',
+                                      ifelse(ybnew < sale_year, 'rebuilt - before', 'rebuilt - ?')),
                   match_year = ifelse(match_type == 'rebuilt - after', end_year,
                                       ifelse(match_type == 'rebuilt - before', 1999, -1)))
 
@@ -152,11 +157,11 @@ rb99_df <- rb99_df %>%
 
   # Renovated
   reno_df <- x_df %>%
-    dplyr::mutate(match_type = ifelse(yr19 > sale_year, 'reno - after',
+    dplyr::mutate(match_type = ifelse(yrnew > sale_year, 'reno - after',
                                       ifelse(yr19 < sale_year, 'reno - before', 'reno - ?')),
                   match_year = ifelse(match_type == 'reno - after', 1999,
                                       ifelse(match_type == 'reno - before',
-                                             ifelse(yr19 < 1999, 1999, end_year), -1)))
+                                             ifelse(yrnew < 1999, 1999, end_year), -1)))
 
 ### Join and Row Bind ------------------------------------------------------------------------------
 
@@ -168,7 +173,7 @@ rb99_df <- rb99_df %>%
   # Matched to 99
   sale99_df <- sale_df %>%
     dplyr::filter(match_year == 1999) %>%
-    dplyr::select(-c(yb99, yr99, yb19, yr19)) %>%
+    dplyr::select(-c(yb99, yr99, ybnew, yrnew)) %>%
     dplyr::left_join(., par99_df, by = 'pinx') %>%
     dplyr::left_join(., rb99_df, by = 'pinx') %>%
     dplyr::left_join(., tax99_df %>%

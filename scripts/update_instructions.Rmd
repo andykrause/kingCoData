@@ -1,0 +1,64 @@
+---
+title: "Update Instructions"
+author: "Andy Krause"
+date: "2/20/2022"
+output: html_document
+---
+
+This document provides instructions for update the `kingCoData` package with new data from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  
+
+#### Step 1 -- Geospatial Data
+
+* Download the latest parcel shapefile from King County Open Data.  The direct link for the required parcel data is: [https://gis-kingcounty.opendata.arcgis.com/datasets/king-county-parcels-parcel-area/explore](https://gis-kingcounty.opendata.arcgis.com/datasets/king-county-parcels-parcel-area/explore)
+
+* Extract and save to the project folder: **/data/raw**
+
+* This folder should also contain the parcel_shapefiles_1999 directory as well
+
+* Execute the **1_create_geo_data.R** script.  Note, this will take a long time to execute given the need to valid polygon completeness
+
+#### Step 2 -- Sales Data
+
+* Download the latest sales data from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  The file you want is : **Real Property Sales (.ZIP)**
+
+* Extract and save to the project folder: **/data/raw/sales/**
+
+* Execute the **2_create_sale_data.R** script. 
+
+#### Step 3 -- Tax History and Property Change Data
+
+* Download the tax history from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  The file you want is : **Tax Data (.ZIP)**
+
+* Extract and move this file (*EXTR_TaxAcctReceivable_V.csv*) to the: **/data/raw** directory. 
+
+* Download the property change history from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  The file you want is : **Change History (.ZIP)**
+
+* Extract and move this file (*EXTR_changehist_v.csv*) to the: **/data/raw** directory. 
+
+* Execute the **3_create_tax_change_data.R** script
+
+#### Step 4 -- Submarket Data
+
+* Execute the **4_create_submarket_data.R** script.  
+
+#### Step 5 -- Gather Residential Building Data
+
+* Download the residential building data from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  The file you want is : **Residential Building (.ZIP)**
+
+* Extract and move this file (*EXTR_resbldg.csv*) to the: **/data/raw** directory. 
+
+* Ensure the historical residential building file exists at **/data/raw/resbldg_1999.csv**
+
+#### Step 6 -- Gather Parcel Data
+
+* Download the tabular parcel data from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  The file you want is : **Parel (.ZIP)**
+
+* Extract and move this file (*EXTR_parcel.csv*) to the: **/data/raw** directory. 
+
+* Ensure the historical parcel file exists at **/data/raw/parcel_1999.csv**
+
+#### Step 7 -- Merge all data
+
+* Execute the **5_merge_data.R** script
+
+

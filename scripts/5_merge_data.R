@@ -217,7 +217,8 @@ rb99_df <- rb99_df %>%
                  view_otherwater, view_other) %>%
    dplyr::left_join(.,
                     subm_df %>% dplyr::select(area, submarket),
-                    by = 'area')
+                    by = 'area') %>%
+   dplyr::distinct(sale_id, .keep_all = TRUE)
 
 ### Write out data ---------------------------------------------------------------------------------
 

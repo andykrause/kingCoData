@@ -40,13 +40,30 @@
   # add PINX
   clean_df <- utilAddPinx(clean_df)
 
-  # add trans count and limit by paramter
+  # add trans count and limit by parameter
   clean_df <- clean_df %>%
-    dplyr::arrange(sale_date) %>%
-    dplyr::group_by(pinx) %>%
-    dplyr::mutate(sales_cnt = dplyr::n(),
-                  sale_nbr = 1:sales_cnt) %>%
-    dplyr::ungroup()
+    dplyr::mutate(ss = substr(pinx, 1, 5))
+
+  clean_ <- split(clean_df, clean_df$ss)
+
+  createSaleCounts <- function(x){
+
+    x %>%
+      dplyr::arrange(sale_date) %>%
+      dplyr::group_by(pinx) %>%
+      dplyr::mutate(sales_cnt = dplyr::n(),
+                    sale_nbr = 1:sales_cnt)
+  }
+
+  for (i in 1:length(clean_)){
+    cat('/n', i)
+    clean_[[i]] <- clean_[[i]] %>%
+      createSaleCounts()
+  }
+
+  clean_df <- clean_ %>%
+    dplyr::bind_rows() %>%
+    dplyr::select(-ss)
 
   # add MultiParcel sale designation
   clean_df <- clean_df %>%

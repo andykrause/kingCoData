@@ -9,6 +9,7 @@
   library(sf)
   library(tidyverse)
   library(kingCoData)
+  sf_use_s2(FALSE)
 
 ## Set Directories
 
@@ -29,11 +30,11 @@
 
   # load data
   parcel_polygon_1999_path <- file.path(data_path, 'raw', 'parcel_shapefiles_1999',
-                                        'parcel.shp')
+                                        'parcelx.shp')
   poly99_sf <- sf::st_read(parcel_polygon_1999_path)
 
   parcel_polygon_curr_path <- file.path(data_path, 'raw', paste0('parcel_shapefiles_', CURR_YEAR),
-                                        'king_county_parcels__parcel_area.shp')
+                                        'parcel_area.shp')
   polycurr_sf <- sf::st_read(parcel_polygon_curr_path)
 
   # Set CRS

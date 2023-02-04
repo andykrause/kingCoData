@@ -52,7 +52,7 @@ par99_df <- par99_df %>%
                 view_lakewash = LakeWashington, view_lakesamm = LakeSammamish,
                 view_otherwater = SmallLakeRiverCreek, view_other = OtherView,
                 wfnt = WfntLocation, golf = AdjacentGolfFairway, greenbelt = AdjacentGreenbelt,
-                noise_traffic = TrafficNoise) %>%
+                noise_traffic = TrafficNoise, subdivision = PlatName) %>%
   utilAddPinx(.)
 
 parcur_df <- parcur_df %>%
@@ -64,7 +64,7 @@ parcur_df <- parcur_df %>%
                 view_lakewash = LakeWashington, view_lakesamm = LakeSammamish,
                 view_otherwater = SmallLakeRiverCreek, view_other = OtherView,
                 wfnt = WfntLocation, golf = AdjacentGolfFairway, greenbelt = AdjacentGreenbelt,
-                noise_traffic = TrafficNoise) %>%
+                noise_traffic = TrafficNoise, subdivision = PlatName) %>%
   utilAddPinx(.)
 
  ## Res Building
@@ -208,7 +208,7 @@ rb99_df <- rb99_df %>%
                  greenbelt = ifelse(greenbelt == 'Y', 1, 0)) %>%
    dplyr::select(sale_id, pinx, sale_date, sale_price, sale_nbr, sale_warning,
                  join_status = match_type, join_year = match_year,
-                 latitude, longitude, area, city, zoning,
+                 latitude, longitude, area, city, zoning, subdivision,
                  present_use, land_val, imp_val,
                  year_built, year_reno, sqft_lot, sqft, sqft_1, sqft_fbsmt, grade, fbsmt_grade,
                  condition, stories, beds, bath_full, bath_3qtr, bath_half, garb_sqft, gara_sqft,

@@ -41,29 +41,29 @@
   clean_df <- utilAddPinx(clean_df)
 
   # add trans count and limit by parameter
-  clean_df <- clean_df %>%
-    dplyr::mutate(ss = substr(pinx, 1, 5))
-
-  clean_ <- split(clean_df, clean_df$ss)
-
   createSaleCounts <- function(x){
 
+    maxn <- x$sales_cnt[1]
+    repn <- nrow(x) / maxn
+
     x %>%
-      dplyr::arrange(sale_date) %>%
-      dplyr::group_by(pinx) %>%
-      dplyr::mutate(sales_cnt = dplyr::n(),
-                    sale_nbr = 1:sales_cnt)
+      dplyr::mutate(sale_nbr = rep(1:maxn, repn))
   }
 
-  for (i in 1:length(clean_)){
-    cat('/n', i)
-    clean_[[i]] <- clean_[[i]] %>%
-      createSaleCounts()
-  }
+  clean_df <- clean_df %>%
+    dplyr::arrange(pinx, sale_date) %>%
+    dplyr::add_count(., pinx, name = 'sales_cnt')
 
-  clean_df <- clean_ %>%
-    dplyr::bind_rows() %>%
-    dplyr::select(-ss)
+  clean_ <- split(clean_df, clean_df$sales_cnt)
+
+  twoplus_df <- purrr::map(.x = clean_[2:length(clean_)],
+                           .f = createSaleCounts) %>%
+    dplyr::bind_rows()
+
+  clean_df <- clean_[[1]] %>%
+    dplyr::bind_rows(twoplus_df)
+
+  rm(clean_); rm(twoplus_df); gc()
 
   # add MultiParcel sale designation
   clean_df <- clean_df %>%

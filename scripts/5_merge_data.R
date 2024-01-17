@@ -224,5 +224,38 @@ rb99_df <- rb99_df %>%
 
  usethis::use_data(kingco_sales, overwrite = T)
 
+### Inference Universe -----------------------------------------------------------------------------
+
+ homes_df <- parcur_df %>%
+   dplyr::left_join(., rbcur_df, by = 'pinx') %>%
+   dplyr::left_join(., taxcur_df %>%
+                      dplyr::select(-tax_year), by = 'pinx') %>%
+   dplyr::left_join(., geocur_df %>%
+                      dplyr::mutate(pinx = paste0('..', PIN)) %>%
+                      dplyr::select(pinx, latitude, longitude), by = 'pinx')
+
+ # Bind Together
+ kingco_homes <- homes_df %>%
+   dplyr::select(-c(Major, Minor, prop_type)) %>%
+   dplyr::filter(present_use %in% c(2, 6, 29)) %>%
+   dplyr::filter(!is.na(latitude)) %>%
+   dplyr::filter(!is.na(land_val)) %>%
+   dplyr::filter(!is.na(grade)) %>%
+   dplyr::mutate(golf = ifelse(golf == 'Y', 1, 0),
+                 greenbelt = ifelse(greenbelt == 'Y', 1, 0)) %>%
+   dplyr::select(pinx, latitude, longitude, area, city, zoning, subdivision,
+                 present_use, land_val, imp_val,
+                 year_built, year_reno, sqft_lot, sqft, sqft_1, sqft_fbsmt, grade, fbsmt_grade,
+                 condition, stories, beds, bath_full, bath_3qtr, bath_half, garb_sqft, gara_sqft,
+                 wfnt, golf, greenbelt, noise_traffic, view_rainier, view_olympics, view_cascades,
+                 view_territorial, view_skyline, view_sound, view_lakewash, view_lakesamm,
+                 view_otherwater, view_other) %>%
+   dplyr::left_join(.,
+                    subm_df %>% dplyr::select(area, submarket),
+                    by = 'area')
+
+   usethis::use_data(kingco_homes, overwrite = T)
+
+
 ####################################################################################################
 ####################################################################################################

@@ -9,11 +9,13 @@
   library(sf)
   library(tidyverse)
   library(kingCoData)
+
+  # Turn off Spherical Geometry (necessary for parcel centroids)
   sf_use_s2(FALSE)
 
 ## Set Directories
 
-  data_path <- file.path(getwd(), 'data')
+  data_path <- '~/dropbox/andy/data/projects/kingcodata'
   raw_path <- file.path(data_path, 'raw')
   ready_path <- file.path(data_path, 'ready')
   if (!file.exists(raw_path)) dir.create(raw_path)
@@ -30,7 +32,7 @@
 
   # load data
   parcel_polygon_1999_path <- file.path(data_path, 'raw', 'parcel_shapefiles_1999',
-                                        'parcelx.shp')
+                                        'parcel.shp')
   poly99_sf <- sf::st_read(parcel_polygon_1999_path)
 
   parcel_polygon_curr_path <- file.path(data_path, 'raw', paste0('parcel_shapefiles_', CURR_YEAR),

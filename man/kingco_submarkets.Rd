@@ -4,11 +4,13 @@
 \name{kingco_submarkets}
 \alias{kingco_submarkets}
 \title{Custom residential submarkets in King County WA}
-\format{A \code{"data.frame"} with 95 rows and 2 variables
+\format{
+A \code{"data.frame"} with 95 rows and 2 variables
 \describe{
   \item{area}{Assessment area or zone}
   \item{submarket}{Custom submarket data}
-}}
+}
+}
 \source{
 Author created
 }

@@ -9,9 +9,10 @@
 
   ## Set Paths
   data_path <- file.path(getwd(), 'data')
+  data_path <- '~/dropbox/andy/data/projects/kingcodata'
+
   raw_path <- file.path(data_path, 'raw')
   ready_path <- file.path(data_path, 'ready')
-
 
   CURR_YEAR = as.numeric(substr(Sys.Date(), 1, 4))
 

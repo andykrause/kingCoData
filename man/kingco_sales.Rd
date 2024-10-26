@@ -4,7 +4,8 @@
 \name{kingco_sales}
 \alias{kingco_sales}
 \title{King County Sales 1999-01-01 through 2019-12-31}
-\format{A \code{"data.frame"} with 458,044 rows and 46 variables
+\format{
+A \code{"data.frame"} with 458,044 rows and 46 variables
 \describe{
   \item{sale_id}{The unique transaction identifying code.}
   \item{pinx}{The unique property identifying code (Major + Minor).  Original value is preceded by
@@ -53,7 +54,9 @@
   \item{view_lakesamm}{View of Lake Sammammish}
   \item{view_otherwater}{View of Other Water}
   \item{view_other}{View of Other}
-}}
+  \item{submarket}{'Area' Field grouped into larger submarkets (subjective)}
+}
+}
 \source{
 King County Assessor: http://info.kingcounty.gov/assessor/DataDownload/
 }

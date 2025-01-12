@@ -44,6 +44,10 @@
   poly99_sf <- poly99_sf %>%
     sf::st_transform(4326)
 
+  sf::st_crs(polycurr_sf) <- king_county_proj
+  polycurr_sf <- polycurr_sf %>%
+    sf::st_transform(4326)
+
   # Remove invalid polygon
   valid_idx <- sf::st_is_valid(poly99_sf)
   poly99_sf <- poly99_sf %>%

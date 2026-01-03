@@ -13,7 +13,7 @@
   raw_path <- file.path(data_path, 'raw')
   ready_path <- file.path(data_path, 'ready')
 
-  CURR_YEAR = as.numeric(substr(Sys.Date(), 1, 4)) #- 1
+  CURR_YEAR = as.numeric(substr(Sys.Date(), 1, 4)) - 1
 
 ### Load Data --------------------------------------------------------------------------------------
 
@@ -179,10 +179,14 @@ rb99_df <- rb99_df %>%
     dplyr::left_join(., par99_df, by = 'pinx') %>%
     dplyr::left_join(., rb99_df, by = 'pinx') %>%
     dplyr::left_join(., tax99_df %>%
-                       dplyr::select(-tax_year), by = 'pinx') %>%
+                       dplyr::select(-tax_year) %>%
+                       dplyr::distinct(pinx, .keep_all = TRUE),
+                     by = 'pinx') %>%
     dplyr::left_join(., geo99_df %>%
                        dplyr::mutate(pinx = paste0('..', PIN)) %>%
-                       dplyr::select(pinx, latitude, longitude), by = 'pinx')
+                       dplyr::select(pinx, latitude, longitude)%>%
+                       dplyr::distinct(pinx, .keep_all = TRUE),
+                     by = 'pinx')
 
  # Matched to 2019
   salecur_df <- sale_df %>%
@@ -191,10 +195,14 @@ rb99_df <- rb99_df %>%
     dplyr::left_join(., parcur_df, by = 'pinx') %>%
     dplyr::left_join(., rbcur_df, by = 'pinx') %>%
     dplyr::left_join(., taxcur_df %>%
-                     dplyr::select(-tax_year), by = 'pinx') %>%
+                       dplyr::select(-tax_year)%>%
+                       dplyr::distinct(pinx, .keep_all = TRUE),
+                     by = 'pinx') %>%
     dplyr::left_join(., geocur_df %>%
                        dplyr::mutate(pinx = paste0('..', PIN)) %>%
-                       dplyr::select(pinx, latitude, longitude), by = 'pinx')
+                       dplyr::select(pinx, latitude, longitude)%>%
+                       dplyr::distinct(pinx, .keep_all = TRUE),
+                     by = 'pinx')
 
  # Bind Together
  kingco_sales <- dplyr::bind_rows(sale99_df, salecur_df) %>%

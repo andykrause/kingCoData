@@ -23,7 +23,7 @@
 
 ## Set constants
 
-  CURR_YEAR = as.numeric(substr(Sys.Date(), 1, 4)) #- 1
+  CURR_YEAR = as.numeric(substr(Sys.Date(), 1, 4)) - 1
 
  # Set King County Assessor's Projection
   king_county_proj <- paste0('+proj=lcc +lat_0=47 +lon_0=-120.833333333333 ',
@@ -35,6 +35,8 @@
                                         'parcel.shp')
   poly99_sf <- sf::st_read(parcel_polygon_1999_path)
 
+
+  # https://gis-kingcounty.opendata.arcgis.com/search?tags=property_OpenData
   parcel_polygon_curr_path <- file.path(data_path, 'raw', paste0('parcel_shapefiles_', CURR_YEAR),
                                         'parcel_area.shp')
   polycurr_sf <- sf::st_read(parcel_polygon_curr_path)

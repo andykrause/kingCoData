@@ -17,9 +17,10 @@
 
   # Set Cutoffs
   sale_min <- 1999
-  sale_max <-  as.numeric(substr(Sys.Date(), 1, 4)) #- 1
+  sale_max <-  as.numeric(substr(Sys.Date(), 1, 4)) - 1
 
   # Sales data
+  # https://info.kingcounty.gov/assessor/datadownload/default.aspx
   sales_df <- read.csv(file.path(file.path(data_path, 'raw', 'sales',
                                           'extr_rpsale.csv')))
 

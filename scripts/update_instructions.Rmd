@@ -51,7 +51,7 @@ This document provides instructions for update the `kingCoData` package with new
 
 #### Step 6 -- Gather Parcel Data
 
-* Download the tabular parcel data from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  The file you want is : **Parel (.ZIP)**
+* Download the tabular parcel data from the [King County Assessor's Website](https://info.kingcounty.gov/assessor/datadownload/default.aspx).  The file you want is : **Parcel (.ZIP)**
 
 * Extract and move this file (*EXTR_parcel.csv*) to the: **/data/raw** directory. 
 

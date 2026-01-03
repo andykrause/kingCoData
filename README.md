@@ -8,4 +8,3 @@ This is a data package.  It includes two main datasets:
 After installing this package with `devtools::install_github('andykrause/kingCoData')`, you can load the data with: `data(kingco_sales)` and/por `data(kingco_homes)`
 
 Most fields are self-explanatory, those that are note can be further explained with the `explain('x')` function, where 'x' is the field name. 
-
